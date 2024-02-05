@@ -4,6 +4,7 @@ from threading import Lock
 from typing import Union, BinaryIO
 
 import torch
+import whisper
 from faster_whisper import WhisperModel
 
 from .utils import ResultWriter, WriteTXT, WriteSRT, WriteVTT, WriteTSV, WriteJSON
@@ -18,6 +19,7 @@ model_path = os.getenv("ASR_MODEL_PATH", os.path.join(
 #   https://opennmt.net/CTranslate2/quantization.html
 if torch.cuda.is_available():
     device = "cuda"
+    # ASR_QUANTIZATION: tiny, base, small, medium, large (only OpenAI Whisper), large-v1, large-v2 and large-v3
     model_quantization = os.getenv("ASR_QUANTIZATION", "float32")
 else:
     device = "cpu"
@@ -72,16 +74,16 @@ def transcribe(
     return output_file
 
 
-# def language_detection(audio):
-#     # load audio and pad/trim it to fit 30 seconds
-#     audio = whisper.pad_or_trim(audio)
+def language_detection(audio):
+    # load audio and pad/trim it to fit 30 seconds
+    audio = whisper.pad_or_trim(audio)
 
-#     # detect the spoken language
-#     with model_lock:
-#         segments, info = model.transcribe(audio, beam_size=5)
-#         detected_lang_code = info.language
+    # detect the spoken language
+    with model_lock:
+        segments, info = model.transcribe(audio, beam_size=5)
+        detected_lang_code = info.language
 
-#     return detected_lang_code
+    return detected_lang_code
 
 
 def write_result(

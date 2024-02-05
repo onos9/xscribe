@@ -22,6 +22,7 @@ python-multipart = "^0.0.6"
 fastapi = "^0.104.1"
 llvmlite = "^0.41.1"
 numba = "^0.58.0"
+openai-whisper = "^20231117"
 faster-whisper = "^0.10.0"
 torch = { version = "=1.13.0+cu117", source = "pytorch" }
 
