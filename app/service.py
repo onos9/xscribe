@@ -14,15 +14,15 @@ from urllib.parse import quote
 
 ASR_ENGINE = os.getenv("ASR_ENGINE", "faster_whisper")
 if ASR_ENGINE == "openai_whisper":
-    from .core import transcribe, language_detection
+    from app.core import transcribe
 else:
-    from .core import transcribe, language_detection
+    from app.core import transcribe
 
 SAMPLE_RATE = 16000
 # LANGUAGE_CODES = sorted(list(tokenizer.LANGUAGES.keys()))
 
-projectMetadata = importlib.metadata.metadata('whisper-asr-webservice')
-app = FastAPI(
+projectMetadata = importlib.metadata.metadata('xscribe')
+api = FastAPI(
     title=projectMetadata['Name'].title().replace('-', ' '),
     description=projectMetadata['Summary'],
     version=projectMetadata['Version'],
@@ -36,28 +36,13 @@ app = FastAPI(
     }
 )
 
-assets_path = os.getcwd() + "/swagger-ui-assets"
-if path.exists(assets_path + "/swagger-ui.css") and path.exists(assets_path + "/swagger-ui-bundle.js"):
-    app.mount("/assets", StaticFiles(directory=assets_path), name="static")
 
-    def swagger_monkey_patch(*args, **kwargs):
-        return get_swagger_ui_html(
-            *args,
-            **kwargs,
-            swagger_favicon_url="",
-            swagger_css_url="/assets/swagger-ui.css",
-            swagger_js_url="/assets/swagger-ui-bundle.js",
-        )
-
-    applications.get_swagger_ui_html = swagger_monkey_patch
-
-
-@app.get("/", response_class=RedirectResponse, include_in_schema=False)
+@api.get("/", response_class=RedirectResponse, include_in_schema=False)
 async def index():
-    return "/docs"
+    return {"message": "Welocome to xcribe the HTTP WebService for Rabbi Chat"}
 
 
-@app.post("/asr", tags=["Endpoints"])
+@api.post("/asr", tags=["Endpoints"])
 async def asr(
         audio_file: UploadFile = File(...),
         encode: bool = Query(
@@ -121,7 +106,7 @@ async def asr(
 #     return np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
 
 
-def load_audio(file: BinaryIO, encode: bool = True, sr: int = 44100):
+def load_audio(file: BinaryIO, encode: bool = True, sr: int = SAMPLE_RATE):
     """
     Open an audio file object and read as mono waveform, resampling as necessary.
     Modified from https://github.com/openai/whisper/blob/main/whisper/audio.py to accept a file object
@@ -145,11 +130,8 @@ def load_audio(file: BinaryIO, encode: bool = True, sr: int = 44100):
         audio_stream = next(s for s in container.streams if s.type == 'audio')
 
         if audio_stream.sample_rate != sr:
-            resampler = av.AudioResampler(
-                format=av.AudioFormat('fltp'),
-                layout='mono',
-                rate=sr
-            )
+            format = av.AudioFormat('s16le')
+            resampler = av.AudioResampler(format, layout='mono', rate=sr)
         else:
             resampler = None
 
@@ -177,21 +159,6 @@ def load_audio(file: BinaryIO, encode: bool = True, sr: int = 44100):
 
 
 def encode_to_pcm(audio_array, sr):
-    """
-    Encode audio array to PCM format using PyAV.
-
-    Parameters
-    ----------
-    audio_array: np.ndarray
-        The audio waveform as a NumPy array
-    sr: int
-        The sample rate of the audio waveform
-
-    Returns
-    -------
-    np.ndarray
-        The encoded audio array in PCM format.
-    """
     output = av.AudioFrame()
     output.format = 's16le'
     output.layout = 'mono'

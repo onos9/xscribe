@@ -9,16 +9,16 @@ from faster_whisper import WhisperModel
 from .utils import ResultWriter, WriteTXT, WriteSRT, WriteVTT, WriteTSV, WriteJSON
 
 
-# ASR_MODELs: tiny, base, small, medium, large (only OpenAI Whisper), large-v1, large-v2 and large-v3
-model_name = os.getenv("ASR_MODEL", "medium")
+# ASR_MODELs: tiny, base, small, medium, large (only OpenAI Whisper), large-v1, large-v2 and large-v3, distil-large-v2
+model_name = os.getenv("ASR_MODEL", "distil-large-v2")
 model_path = os.getenv("ASR_MODEL_PATH", os.path.join(
-    os.path.expanduser("~"), ".cache", "whisper"))
-  
+    os.path.expanduser("~"), ".cache", "distil-large-v2"))
+
 # More about available quantization levels is here:
 #   https://opennmt.net/CTranslate2/quantization.html
 if torch.cuda.is_available():
     device = "cuda"
-    model_quantization = os.getenv("ASR_QUANTIZATION", "float32")
+    model_quantization = os.getenv("ASR_QUANTIZATION", "int8")
 else:
     device = "cpu"
     model_quantization = os.getenv("ASR_QUANTIZATION", "int8")
@@ -27,10 +27,12 @@ model = WhisperModel(
     model_size_or_path=model_name,
     device=device,
     compute_type=model_quantization,
-    download_root=model_path
+    download_root=model_path,
 )
 
 model_lock = Lock()
+
+
 def transcribe(
         audio,
         task: Union[str, None],
@@ -49,11 +51,14 @@ def transcribe(
         options_dict["vad_filter"] = True
     if word_timestamps:
         options_dict["word_timestamps"] = True
+
+    options_dict["condition_on_previous_text"] = False
+    options_dict["max_new_tokens"] = 128
     with model_lock:
         segments = []
         text = ""
         segment_generator, info = model.transcribe(
-            audio, beam_size=5, **options_dict)
+            audio, beam_size = 5, **options_dict)
         for segment in segment_generator:
             segments.append(segment)
             text = text + segment.text

@@ -344,9 +344,8 @@ version = "0.10.0"
 description = "Faster Whisper transcription with CTranslate2"
 optional = false
 python-versions = ">=3.8"
-files = [
-    {file = "faster-whisper-0.10.0.tar.gz", hash = "sha256:591809328b93c8e4594d52097ec6352a270a81fbb7b956254967f28700f7e4da"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 av = "==10.*"
@@ -358,6 +357,12 @@ tokenizers = ">=0.13,<0.16"
 [package.extras]
 conversion = ["transformers[torch] (>=4.23)"]
 dev = ["black (==23.*)", "flake8 (==6.*)", "isort (==5.*)", "pytest (==7.*)"]
+
+[package.source]
+type = "git"
+url = "https://github.com/SYSTRAN/faster-whisper.git"
+reference = "master"
+resolved_reference = "f144e4c83d54f3c3304b6a75a3f563e5f84de6cf"
 
 [[package]]
 name = "filelock"
@@ -1574,4 +1579,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5e8a8c5efaca7f440ef195f176ec9e84e1aaeb5295e88704b85d53e426256259"
+content-hash = "4fb1e7e423c1972d7e5fa3da41b0856f6e418fae6c0d659c69565a93ec600336"
