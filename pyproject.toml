@@ -28,6 +28,9 @@ torch = { version = "=1.13.0+cu117", source = "pytorch" }
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.4"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
