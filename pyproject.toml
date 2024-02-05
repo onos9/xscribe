@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "xscribe"
+version = "0.1.0"
+description = ""
+authors = ["Onojeta Brown <onosbrown.saved@gmail.com>"]
+homepage  = "https://github.com/onos9/rabbi"
+license = "https://github.com/onos9/rabbi/blob/main/LICENCE"
+readme = "README.md"
+packages = [{ include = "app" }]
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = { extras = ["standard"], version = "^0.23.2" }
+gunicorn = "^21.0.1"
+tqdm = "^4.66.1"
+python-multipart = "^0.0.6"
+fastapi = "^0.104.1"
+llvmlite = "^0.41.1"
+numba = "^0.58.0"
+faster-whisper = "^0.10.0"
+torch = [
+  {markers = "sys_platform == 'linux' and platform_machine == 'x86_64'", url="https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp310-cp310-linux_x86_64.whl"},
+]
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
