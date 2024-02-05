@@ -31,8 +31,6 @@ model = WhisperModel(
 )
 
 model_lock = Lock()
-
-
 def transcribe(
         audio,
         task: Union[str, None],
