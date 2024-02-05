@@ -10,7 +10,6 @@ from fastapi import FastAPI, File, UploadFile, Query, applications
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import StreamingResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-# from whisper import tokenizer
 from urllib.parse import quote
 
 ASR_ENGINE = os.getenv("ASR_ENGINE", "faster_whisper")
@@ -87,17 +86,6 @@ async def asr(
             'Content-Disposition': f'attachment; filename="{quote(audio_file.filename)}.{output}"'
         }
     )
-
-
-# @app.post("/detect-language", tags=["Endpoints"])
-# async def detect_language(
-#         audio_file: UploadFile = File(...),
-#         encode: bool = Query(
-#             default=True, description="Encode audio first through ffmpeg")
-# ):
-#     detected_lang_code = language_detection(
-#         load_audio(audio_file.file, encode))
-#     return {"detected_language": tokenizer.LANGUAGES[detected_lang_code], "language_code": detected_lang_code}
 
 
 # def load_audio(file: BinaryIO, encode=True, sr: int = SAMPLE_RATE):

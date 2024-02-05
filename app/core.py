@@ -71,19 +71,6 @@ def transcribe(
 
     return output_file
 
-
-# def language_detection(audio):
-#     # load audio and pad/trim it to fit 30 seconds
-#     audio = whisper.pad_or_trim(audio)
-
-#     # detect the spoken language
-#     with model_lock:
-#         segments, info = model.transcribe(audio, beam_size=5)
-#         detected_lang_code = info.language
-
-#     return detected_lang_code
-
-
 def write_result(
         result: dict, file: BinaryIO, output: Union[str, None]
 ):
