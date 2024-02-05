@@ -1240,6 +1240,14 @@ optional = false
 python-versions = ">=3.7.0"
 files = [
     {file = "torch-1.13.0+cpu-cp310-cp310-linux_x86_64.whl", hash = "sha256:b37a1a701fa00bcb9d508ebc509c3137df5f1cb9287548ee674893ac9561fbae"},
+    {file = "torch-1.13.0+cpu-cp310-cp310-win_amd64.whl", hash = "sha256:6fe6a7b8c7fcb4ba5f9d20854ecd4d6a8644c5cb12ff9b72d1523c6dcf543606"},
+    {file = "torch-1.13.0+cpu-cp311-cp311-linux_x86_64.whl", hash = "sha256:c48cf9d76c017cd5f6a015fee1c082a57236f44e7c289060ea207a50ca9e66f1"},
+    {file = "torch-1.13.0+cpu-cp37-cp37m-linux_x86_64.whl", hash = "sha256:c55ca981cf3f1ce8db0fc95327fe2b8092386425d83d6ad02fe1b8d1bfae5eab"},
+    {file = "torch-1.13.0+cpu-cp37-cp37m-win_amd64.whl", hash = "sha256:40616584c171a2562480b788da29e6ae0a35e1aae2e5dc55bd2cc9bbedc847dd"},
+    {file = "torch-1.13.0+cpu-cp38-cp38-linux_x86_64.whl", hash = "sha256:4adafbcc43d2e7fa0b661a3c36c85f0ed35f69ab5fc88f4b245ad55174776183"},
+    {file = "torch-1.13.0+cpu-cp38-cp38-win_amd64.whl", hash = "sha256:0a46a7170bbdca7eb71a595bd499d3bc4b5862aa756120c55383111ceeffe09e"},
+    {file = "torch-1.13.0+cpu-cp39-cp39-linux_x86_64.whl", hash = "sha256:c7531242830606713a32a3c0047e19ec7d718c971a8a9482de7f3c38a05a97a7"},
+    {file = "torch-1.13.0+cpu-cp39-cp39-win_amd64.whl", hash = "sha256:8df18dacc5b3b5739fa86b133329abb2f63932104e5a0e57ce01133dff754eb7"},
 ]
 
 [package.dependencies]
@@ -1249,8 +1257,9 @@ typing-extensions = "*"
 opt-einsum = ["opt-einsum (>=3.3)"]
 
 [package.source]
-type = "url"
-url = "https://download.pytorch.org/whl/cpu/torch-1.13.0%2Bcpu-cp310-cp310-linux_x86_64.whl"
+type = "legacy"
+url = "https://download.pytorch.org/whl/cpu"
+reference = "pytorch"
 
 [[package]]
 name = "tqdm"
@@ -1540,4 +1549,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "41ae09c7b21999b1bc3d3fabaf720090e92a44224420f796a9f368608c06920e"
+content-hash = "568dc663c67ba5bd64474b72c8f6003a4781ec872e05e6dc4ee97d2490258c31"
